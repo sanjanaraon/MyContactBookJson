@@ -41,6 +41,7 @@ public class contactBookController {
         for (Contact contact:allContacts){
             jsonContacts.add(objectMapper.writeValueAsString(contact));
         }
-        return jsonContacts.get(0);
+        String contacts= String.valueOf(jsonContacts);
+        return contacts;
     }
 }
