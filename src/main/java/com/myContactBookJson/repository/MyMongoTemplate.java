@@ -2,6 +2,7 @@ package com.myContactBookJson.repository;
 
 import com.mongodb.MongoClient;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.MongoTemplate;
 
 public class MyMongoTemplate {
     static MongoOperations mongoOperations;
@@ -10,7 +11,7 @@ public class MyMongoTemplate {
 
     public static MongoOperations getMongoConnection() {
         mongo = new MongoClient("localhost", 27017);
-        mongoOperations = new org.springframework.data.mongodb.core.MongoTemplate(mongo, DataBase);
+        mongoOperations = new MongoTemplate(mongo, DataBase);
         return mongoOperations;
     }
 }

@@ -1,5 +1,6 @@
 package com.myContactBookJson.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.googlecode.totallylazy.Maps;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -12,9 +13,14 @@ import java.util.Map;
 
 import static com.googlecode.totallylazy.Pair.pair;
 
-@Document(collection = "contacts")
-//@JsonIgnoreProperties({"partialObject", "_id"})
+@Document(collection = "jsonContacts")
+@JsonIgnoreProperties({"partialObject", "_id"})
 public class Contact {
+
+    @JsonProperty
+    @Id
+    private String id;
+
     @JsonProperty
     @Indexed
     private String name;
@@ -33,7 +39,6 @@ public class Contact {
     private String city;
 
     @JsonProperty
-    @Id
     private String emailId;
 
     public Contact() {
@@ -41,7 +46,8 @@ public class Contact {
 
 
 
-    public Contact(String name, int mobileNumber, String street1,String city, String emailId) {
+    public Contact(String id, String name, int mobileNumber, String street1, String city, String emailId) {
+        this.id = id;
         this.name = name;
         this.mobileNumber = mobileNumber;
         this.street1 = street1;
@@ -49,7 +55,8 @@ public class Contact {
         this.emailId = emailId;
     }
 
-    public Contact(String name, int mobileNumber, String street1, String street2,String city, String emailId) {
+    public Contact(String id, String name, int mobileNumber, String street1, String street2, String city, String emailId) {
+        this.id = id;
         this.name = name;
         this.mobileNumber = mobileNumber;
         this.street1 = street1;
@@ -60,12 +67,21 @@ public class Contact {
 
     public Map<String, Object> toMap() {
         return Maps.<String, Object>
-                map(pair("name", name),
+                map(pair("id",id),
+                pair("name", name),
                 pair("mobileNumber", mobileNumber),
                 pair("street1", street1),
                 pair("street2", street2),
                 pair("emailId", emailId)
         );
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {

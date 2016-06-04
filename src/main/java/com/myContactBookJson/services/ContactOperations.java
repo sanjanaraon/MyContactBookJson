@@ -19,36 +19,37 @@ public class ContactOperations {
 
     public List<Contact> getAllContacts() {
         //db.contactBook.contacts.find().pretty()
-        List<Contact> contacts = mongoOperations.findAll(Contact.class, "contacts");
+        List<Contact> contacts = mongoOperations.findAll(Contact.class);
         return contacts;
     }
 
     public void addContact(Contact contact) {
-        mongoOperations.insert(contact, "contacts");
+        mongoOperations.insert(contact);
     }
 
     public Contact updateContact(Contact contact) throws UnknownHostException {
 
-        mongoOperations.findAndModify(Query.query(Criteria.where("_id").is(contact.getEmailId())), Update.update("name", contact.getName()),Contact.class);
-        mongoOperations.findAndModify(Query.query(Criteria.where("_id").is(contact.getEmailId())), Update.update("mobileNumber", contact.getMobileNumber()), Contact.class);
-        mongoOperations.findAndModify(Query.query(Criteria.where("_id").is(contact.getEmailId())), Update.update("street1", contact.getStreet1()), Contact.class);
-        mongoOperations.findAndModify(Query.query(Criteria.where("_id").is(contact.getEmailId())), Update.update("street2", contact.getStreet2()), Contact.class);
-        mongoOperations.findAndModify(Query.query(Criteria.where("_id").is(contact.getEmailId())), Update.update("city", contact.getCity()), Contact.class);
+        mongoOperations.findAndModify(Query.query(Criteria.where("_id").is(contact.getId())), Update.update("name", contact.getName()),Contact.class);
+        mongoOperations.findAndModify(Query.query(Criteria.where("_id").is(contact.getId())), Update.update("mobileNumber", contact.getMobileNumber()), Contact.class);
+        mongoOperations.findAndModify(Query.query(Criteria.where("_id").is(contact.getId())), Update.update("street1", contact.getStreet1()), Contact.class);
+        mongoOperations.findAndModify(Query.query(Criteria.where("_id").is(contact.getId())), Update.update("street2", contact.getStreet2()), Contact.class);
+        mongoOperations.findAndModify(Query.query(Criteria.where("_id").is(contact.getId())), Update.update("city", contact.getCity()), Contact.class);
+        mongoOperations.findAndModify(Query.query(Criteria.where("_id").is(contact.getId())), Update.update("emailId", contact.getEmailId()),Contact.class);
         mongoOperations.save(contact);
-        return getContact(contact.getEmailId());
+        return getContactById(contact.getId());
     }
 
-    public Contact getContact(String emailId) {
-            List<Contact> contacts = mongoOperations.find(Query.query(Criteria.where("_id").is(emailId)), Contact.class);
-        if(contacts.size()==0) {
-            return null;
-        }
-            return contacts.get(0);
-    }
+//    public Contact getContactByEmailId(String emailId) {
+//            List<Contact> contacts = mongoOperations.find(Query.query(Criteria.where("_id").is(emailId)), Contact.class);
+//        if(contacts.size()==0) {
+//            return null;
+//        }
+//            return contacts.get(0);
+//    }
 
-    public void deleteContact(String emailId) {
-        Contact contact = getContact(emailId);
-        mongoOperations.count(Query.query(Criteria.where("_id")), Contact.class);
+    public void deleteContact(String id) {
+        Contact contact = getContactById(id);
+        mongoOperations.count(Query.query(Criteria.where("_id").is(id)), Contact.class);
         mongoOperations.remove(contact);
     }
 
@@ -59,5 +60,9 @@ public class ContactOperations {
          contacts = mongoOperations.find(Query.query(Criteria.where("mobileNumber").is(searchContact)), Contact.class);
       }
         return contacts;
+    }
+
+    public Contact getContactById(String id) {
+        return mongoOperations.findOne(Query.query(Criteria.where("_id").is(id)),Contact.class);
     }
 }
