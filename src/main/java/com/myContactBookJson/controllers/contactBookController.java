@@ -41,7 +41,7 @@ public class contactBookController {
             jsonContacts.add(objectMapper.writeValueAsString(contact));
         }
         String contacts= String.valueOf(jsonContacts);
-        return "{ contacts: "+contacts+"}";
+        return contacts;
     }
 
     @RequestMapping(method = RequestMethod.GET,value = "/{id}")
@@ -65,12 +65,11 @@ public class contactBookController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    @ResponseBody
     public String createContact( @RequestBody String contactInfo) throws IOException {
         ObjectMapper objectMapper=new ObjectMapper();
         Contact contact = objectMapper.readValue(contactInfo, Contact.class);
         contactOperations.addContact(contact);
-        return "contact added";
+        return "redirect:contacts";
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
